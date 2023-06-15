@@ -1,6 +1,8 @@
-name: Java CI
-
-on: [push]
+name: Homework01 Workflow - Test and check thing
+on:
+  push:
+    branches:
+      - homework01
 
 jobs:
   build:
@@ -15,3 +17,4 @@ jobs:
           distribution: 'temurin'
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots package
+
