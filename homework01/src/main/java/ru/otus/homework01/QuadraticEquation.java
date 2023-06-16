@@ -1,12 +1,14 @@
 package ru.otus.homework01;
 
 import ru.otus.homework01.exception.ArgumentException;
+import ru.otus.homework01.exception.CalculatingException;
 
 public class QuadraticEquation {
 
     public static final double EPSILON = 0.000_000_1;
     public static final String A_IS_ZERO = "a равно 0";
     public static final String PARAMETER_NOT_VALUE = "Параметр %s не число";
+    public static final String D_IS_GREATER_THEN_MAX = "В результате вычислений превышено максимальное значение";
 
     public double[] solve(double a, double b, double c) {
 
@@ -19,6 +21,10 @@ public class QuadraticEquation {
         }
 
         double d = b * b - 4 * a * c;
+
+        if (Double.isInfinite(d)) {
+            throw new CalculatingException(D_IS_GREATER_THEN_MAX);
+        }
 
         if (d < -EPSILON) {
             return new double[0];

@@ -7,10 +7,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.otus.homework01.exception.ArgumentException;
+import ru.otus.homework01.exception.CalculatingException;
 
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 public class QuadraticEquationTest {
     private QuadraticEquation quadraticEquation;
@@ -18,14 +20,6 @@ public class QuadraticEquationTest {
     @BeforeEach
     void init() {
         quadraticEquation = new QuadraticEquation();
-    }
-
-    private static Stream<Arguments> provideParamsForTest() {
-        return Stream.of(
-                Arguments.of(Double.NaN, 10, 20, String.format(QuadraticEquation.PARAMETER_NOT_VALUE, "a")),
-                Arguments.of(2, Double.POSITIVE_INFINITY, 1, String.format(QuadraticEquation.PARAMETER_NOT_VALUE, "b")),
-                Arguments.of(2, 1, Double.NEGATIVE_INFINITY, String.format(QuadraticEquation.PARAMETER_NOT_VALUE, "c"))
-        );
     }
 
     @Test
@@ -84,16 +78,35 @@ public class QuadraticEquationTest {
         assertTrue(Math.abs(result[1] + 2.5E-4) < QuadraticEquation.EPSILON);
     }
 
+    private static Stream<Arguments> provideParamsForTest() {
+        return Stream.of(
+                arguments(Double.NaN, 10, 20, String.format(QuadraticEquation.PARAMETER_NOT_VALUE, "a")),
+                arguments(2, Double.POSITIVE_INFINITY, 1, String.format(QuadraticEquation.PARAMETER_NOT_VALUE, "b")),
+                arguments(2, 1, Double.NEGATIVE_INFINITY, String.format(QuadraticEquation.PARAMETER_NOT_VALUE, "c"))
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("provideParamsForTest")
-    void testThatParametersNan(double a, double b, double c, String result) {
+    void testThatParametersNan(double a, double b, double c, String expectedMessage) {
         Exception exception = assertThrows(ArgumentException.class, () -> quadraticEquation.solve(a, b, c));
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 
-        String expectedMessage = result;
+    @Test
+    void testWhenBIsMaxValue() {
+        double a = 1;
+        double b = Double.MAX_VALUE;
+        double c = 1;
+        Exception exception = assertThrows(CalculatingException.class, () -> quadraticEquation.solve(a, b, c));
+
+        String expectedMessage = QuadraticEquation.D_IS_GREATER_THEN_MAX;
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
     }
+
 
     @AfterEach
     void tearDown() {
