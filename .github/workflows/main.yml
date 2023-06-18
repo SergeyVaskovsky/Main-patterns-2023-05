@@ -1,6 +1,9 @@
 name: Homework01 Workflow - Test and check thing
 on:
-  workflow_dispatch:
+  workflow_run:
+    workflows: [Test]
+    types: [requested]
+    branches: [homework01]
 
 jobs:
   build:
