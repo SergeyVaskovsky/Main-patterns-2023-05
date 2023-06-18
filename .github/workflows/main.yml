@@ -1,6 +1,8 @@
 name: Homework01 Workflow - Test and check thing
 on:
-  workflow_dispatch
+  push:
+    branches:
+      - homework01
 
 jobs:
   build:
