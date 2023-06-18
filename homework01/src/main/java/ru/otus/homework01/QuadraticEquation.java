@@ -11,7 +11,6 @@ public class QuadraticEquation {
     public static final String D_IS_GREATER_THEN_MAX_MESSAGE = "В результате вычислений превышено максимальное значение";
 
     public double[] solve(double a, double b, double c) {
-
         checkForNan(a, "a");
         checkForNan(b, "b");
         checkForNan(c, "c");
