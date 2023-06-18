@@ -6,9 +6,9 @@ import ru.otus.homework01.exception.CalculatingException;
 public class QuadraticEquation {
 
     public static final double EPSILON = 0.000_000_1;
-    public static final String A_IS_ZERO = "a равно 0";
-    public static final String PARAMETER_NOT_VALUE = "Параметр %s не число";
-    public static final String D_IS_GREATER_THEN_MAX = "В результате вычислений превышено максимальное значение";
+    public static final String A_IS_ZERO_MESSAGE = "a равно 0";
+    public static final String PARAMETER_NOT_VALUE_MESSAGE = "Параметр %s не число";
+    public static final String D_IS_GREATER_THEN_MAX_MESSAGE = "В результате вычислений превышено максимальное значение";
 
     public double[] solve(double a, double b, double c) {
 
@@ -17,13 +17,13 @@ public class QuadraticEquation {
         checkForNan(c, "c");
 
         if (Math.abs(a) <= EPSILON) {
-            throw new ArgumentException(A_IS_ZERO);
+            throw new ArgumentException(A_IS_ZERO_MESSAGE);
         }
 
         double d = b * b - 4 * a * c;
 
         if (Double.isInfinite(d)) {
-            throw new CalculatingException(D_IS_GREATER_THEN_MAX);
+            throw new CalculatingException(D_IS_GREATER_THEN_MAX_MESSAGE);
         }
 
         if (d < -EPSILON) {
@@ -43,7 +43,7 @@ public class QuadraticEquation {
 
     private void checkForNan(double value, String parameterName) {
         if (Double.isNaN(value) || Double.isInfinite(value)) {
-            throw new ArgumentException(String.format(PARAMETER_NOT_VALUE, parameterName));
+            throw new ArgumentException(String.format(PARAMETER_NOT_VALUE_MESSAGE, parameterName));
         }
     }
 }

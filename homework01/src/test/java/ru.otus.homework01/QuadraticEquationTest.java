@@ -61,7 +61,7 @@ public class QuadraticEquationTest {
 
         Exception exception = assertThrows(ArgumentException.class, () -> quadraticEquation.solve(a, b, c));
 
-        String expectedMessage = QuadraticEquation.A_IS_ZERO;
+        String expectedMessage = QuadraticEquation.A_IS_ZERO_MESSAGE;
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -80,33 +80,22 @@ public class QuadraticEquationTest {
 
     private static Stream<Arguments> provideParamsForTest() {
         return Stream.of(
-                arguments(Double.NaN, 10, 20, String.format(QuadraticEquation.PARAMETER_NOT_VALUE, "a")),
-                arguments(2, Double.POSITIVE_INFINITY, 1, String.format(QuadraticEquation.PARAMETER_NOT_VALUE, "b")),
-                arguments(2, 1, Double.NEGATIVE_INFINITY, String.format(QuadraticEquation.PARAMETER_NOT_VALUE, "c"))
+                arguments(Double.NaN, 10, 20, ArgumentException.class, String.format(QuadraticEquation.PARAMETER_NOT_VALUE_MESSAGE, "a")),
+                arguments(2, Double.POSITIVE_INFINITY, 1, ArgumentException.class, String.format(QuadraticEquation.PARAMETER_NOT_VALUE_MESSAGE, "b")),
+                arguments(2, 1, Double.NEGATIVE_INFINITY, ArgumentException.class, String.format(QuadraticEquation.PARAMETER_NOT_VALUE_MESSAGE, "c")),
+                arguments(Double.MAX_VALUE, 1, 1, CalculatingException.class, QuadraticEquation.D_IS_GREATER_THEN_MAX_MESSAGE),
+                arguments(1, Double.MAX_VALUE, 1, CalculatingException.class, QuadraticEquation.D_IS_GREATER_THEN_MAX_MESSAGE),
+                arguments(1, 1, Double.MAX_VALUE, CalculatingException.class, QuadraticEquation.D_IS_GREATER_THEN_MAX_MESSAGE)
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideParamsForTest")
-    void testThatParametersNan(double a, double b, double c, String expectedMessage) {
-        Exception exception = assertThrows(ArgumentException.class, () -> quadraticEquation.solve(a, b, c));
+    void testThatParametersNan(double a, double b, double c, Class<Exception> clazz, String expectedMessage) {
+        Exception exception = assertThrows(clazz, () -> quadraticEquation.solve(a, b, c));
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expectedMessage));
     }
-
-    @Test
-    void testWhenBIsMaxValue() {
-        double a = 1;
-        double b = Double.MAX_VALUE;
-        double c = 1;
-        Exception exception = assertThrows(CalculatingException.class, () -> quadraticEquation.solve(a, b, c));
-
-        String expectedMessage = QuadraticEquation.D_IS_GREATER_THEN_MAX;
-        String actualMessage = exception.getMessage();
-
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
-
 
     @AfterEach
     void tearDown() {
