@@ -16,24 +16,24 @@ public class MoveAdapter implements Movable {
         this.gameObject = gameObject;
     }
 
-    public Vector move() throws PropertyNotFoundException {
+    public Vector move() {
         Vector result = Vector.plus(getPosition(), getVelocity());
         setPosition(result);
         return result;
     }
 
     @Override
-    public Vector getPosition() throws PropertyNotFoundException {
+    public Vector getPosition() {
         return (Vector) gameObject.getProperty(POSITION);
     }
 
     @Override
-    public Vector getVelocity() throws PropertyNotFoundException {
+    public Vector getVelocity() {
         return (Vector) gameObject.getProperty(VELOCITY);
     }
 
     @Override
-    public void setPosition(Vector newVector) throws CantSetPositionException {
+    public void setPosition(Vector newVector) {
         gameObject.setProperty(POSITION, newVector);
     }
 }
