@@ -1,24 +1,28 @@
 package ru.otus;
 
-import java.util.concurrent.BlockingQueue;
-
 public class QueueHandler {
 
-    private BlockingQueue<Command> blockingQueue;
+    private final Queue queue;
     private boolean stop = false;
 
-    public void handle() {
-        while (!stop) {
+    public QueueHandler(Queue queue) {
+        this.queue = queue;
+    }
 
-            Command command = blockingQueue.poll();
+    public void setStop(boolean stop) {
+        this.stop = stop;
+    }
+
+    public void handle() throws Exception {
+        while (!queue.getQueue().isEmpty()) {
+            Command command = queue.getQueue().poll();
             if (command == null) {
                 continue;
             }
-
             try {
                 command.execute();
             } catch (Exception exception) {
-                ExceptionHandler.handle(exception, command).execute();
+                ExceptionHandler.handle(exception, command, queue.getQueue()).execute();
             }
         }
     }

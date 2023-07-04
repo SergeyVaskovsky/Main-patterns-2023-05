@@ -2,19 +2,18 @@ package ru.otus.commands;
 
 import ru.otus.Command;
 
-import java.util.concurrent.BlockingQueue;
+import java.util.Map;
 
 public class AddToQueueCommand implements Command {
 
-    private final BlockingQueue<Command> queue;
-    private final LogCommand logCommand;
+    private Map<String, Object> parameters;
 
-    public AddToQueueCommand(BlockingQueue<Command> queue, LogCommand logCommand) {
-        this.queue = queue;
-        this.logCommand = logCommand;
+    public void execute() throws Exception {
+        //queue.getQueue().add(logCommand);
     }
 
-    public void execute() {
-        queue.add(logCommand);
+    @Override
+    public void setParameters(Map<String, Object> parameters) {
+        this.parameters = parameters;
     }
 }
