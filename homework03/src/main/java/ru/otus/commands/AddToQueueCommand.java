@@ -1,19 +1,15 @@
 package ru.otus.commands;
 
 import ru.otus.Command;
+import ru.otus.GameObject;
+import ru.otus.IoC;
 
-import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class AddToQueueCommand implements Command {
 
-    private Map<String, Object> parameters;
-
     public void execute() throws Exception {
-        //queue.getQueue().add(logCommand);
-    }
-
-    @Override
-    public void setParameters(Map<String, Object> parameters) {
-        this.parameters = parameters;
+        LinkedBlockingQueue<Command> queue = (LinkedBlockingQueue<Command>) ((GameObject) IoC.resolve("game")).getQueue();
+        queue.add(new LogCommand());
     }
 }

@@ -2,11 +2,11 @@ package ru.otus;
 
 public class QueueHandler {
 
-    private final Queue queue;
+    private final GameObject game;
     private boolean stop = false;
 
-    public QueueHandler(Queue queue) {
-        this.queue = queue;
+    public QueueHandler() {
+        this.game = IoC.resolve("game");
     }
 
     public void setStop(boolean stop) {
@@ -14,15 +14,15 @@ public class QueueHandler {
     }
 
     public void handle() throws Exception {
-        while (!queue.getQueue().isEmpty()) {
-            Command command = queue.getQueue().poll();
+        while (!game.getQueue().isEmpty()) {
+            Command command = game.getQueue().poll();
             if (command == null) {
                 continue;
             }
             try {
                 command.execute();
             } catch (Exception exception) {
-                ExceptionHandler.handle(exception, command, queue.getQueue()).execute();
+                ExceptionHandler.handle(exception, command).execute();
             }
         }
     }

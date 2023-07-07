@@ -1,21 +1,16 @@
 package ru.otus.commands;
 
 import ru.otus.Command;
-
-import java.util.Map;
+import ru.otus.GameObject;
+import ru.otus.IoC;
 
 public class LogCommand implements Command {
 
-    private Map<String, Object> parameters;
-
     @Override
-    public void execute() throws Exception {
-        Exception exception = (Exception) parameters.get("exception");
-        System.out.println(exception.getMessage());
-    }
-
-    @Override
-    public void setParameters(Map<String, Object> parameters) {
-        this.parameters = parameters;
+    public void execute() {
+        Exception exception = ((GameObject) IoC.resolve("game")).getLastException();
+        if (exception != null) {
+            System.out.println(exception.getMessage());
+        }
     }
 }
