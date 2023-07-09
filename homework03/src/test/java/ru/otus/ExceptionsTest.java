@@ -32,6 +32,9 @@ public class ExceptionsTest {
         System.setOut(ps);
     }
 
+    /**
+     * 4
+     */
     @Test
     void testCommandWriteLog() {
         LogCommand logCommand = new LogCommand();
@@ -44,6 +47,9 @@ public class ExceptionsTest {
                 List.of("workException\n".split("\n")));
     }
 
+    /**
+     * 5
+     */
     @Test
     void testCommandWriteLogToQueue() throws Exception {
         WorkCommand workCommand = new WorkCommand();
@@ -61,6 +67,9 @@ public class ExceptionsTest {
         );
     }
 
+    /**
+     * 6-8
+     */
     @Test
     void testRepeatCommandExceptionalCommandToQueue() throws Exception {
         WorkCommand workCommand = new WorkCommand();
@@ -80,6 +89,9 @@ public class ExceptionsTest {
         );
     }
 
+    /**
+     * 9
+     */
     @Test
     void testRepeatCommandTwoTimeExceptionalCommandToQueue() throws Exception {
         WorkCommand workCommand = new WorkCommand();
