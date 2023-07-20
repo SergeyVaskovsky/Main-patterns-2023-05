@@ -1,25 +1,17 @@
 package ru.otus;
 
 import java.util.Map;
-import java.util.function.Function;
 
-public class Scope implements ScopeInterface {
 
-    private final Map<String, FunctionWithObjects> dependencies;
-    private final ScopeInterface parent;
+public class Scope {
 
-    public Scope(Map<String, FunctionWithObjects> dependencies, ScopeInterface parent) {
+    private final Map<String, Map<String, Object[]>> dependencies;
+
+    public Scope(Map<String, Map<String, Object[]>> dependencies) {
         this.dependencies = dependencies;
-        this.parent = parent;
     }
 
-    @Override
-    public Object resolve(String key, Object... args) {
-        var dependencyResolver = dependencies.get(key);
-        if (dependencyResolver != null) {
-            return dependencyResolver.apply(args);
-        } else {
-            return parent.resolve(key, args);
-        }
+    public Map<String, Object[]> getDependencies(String scopeName) {
+        return dependencies.get(scopeName);
     }
 }
