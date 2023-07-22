@@ -23,10 +23,9 @@ public class IoC {
 
         if ("Scopes.Current.Set".equals(key)) {
             scopeName = (String)args[0];
-            Map<String, Map<String, Object[]>> scopeMaps = new HashMap<>();
-            scopeMaps.put(scopeName, new HashMap<>());
-            scope = new Scope(scopeMaps);
-            scopeStorage.setCurrentScope(scope);
+            if (scope.getDependencies(scopeName) == null) {
+                scope.addScope(scopeName);
+            }
             return null;
         }
 
