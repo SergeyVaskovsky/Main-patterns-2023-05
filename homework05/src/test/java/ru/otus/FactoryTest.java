@@ -88,10 +88,9 @@ public class FactoryTest {
         });
         t1.start();
 
-
         final B[] b = new B[1];
         var t2 = new Thread(() -> {
-            IoC.resolve("IoC.Register", "b", (FunctionWithObjects) (args) -> new B((A) args[0]));
+            IoC.resolve("IoC.Register", "b", (FunctionWithObjects) (args) -> new B(new A()));
             b[0] = (B) IoC.resolve("b", a[0]);
             b[0].printHello();
         });
