@@ -21,6 +21,7 @@ public class AdapterGeneratorTests {
 
     private static AdapterGenerator adapterGenerator;
     private static Class<?> clazz;
+    private static AdapterCompiler adapterCompiler;
 
     @BeforeAll
     static void newAdapterGenerator() {
@@ -70,22 +71,8 @@ public class AdapterGeneratorTests {
 
     @Test
     void shouldGenerateClass() throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        List<String> adapterClass = adapterGenerator.generate();
-        String source = String.join("\n", adapterClass);
-
-        File root = Files.createTempDirectory("java").toFile();
-        File sourceFile = new File(root, "MovableAdapter.java");
-        sourceFile.getParentFile().mkdirs();
-        Files.writeString(sourceFile.toPath(), source);
-
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        compiler.run(null, null, null, sourceFile.getPath());
-
-        URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { root.toURI().toURL() });
-        Class<?> cls = Class.forName("MovableAdapter", true, classLoader);
-        Object obj = new Object();
-        Object instance = cls.getDeclaredConstructor(obj.getClass()).newInstance(obj);
-        System.out.println(instance);
+        List<String> sourceCode = adapterGenerator.generate();
+        Object adapter = adapterCompiler.compile(clazz.getSimpleName(), sourceCode);
     }
 
 }

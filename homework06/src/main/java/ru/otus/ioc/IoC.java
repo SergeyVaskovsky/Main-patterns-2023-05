@@ -17,15 +17,10 @@ public class IoC {
             scopeStorage.setCurrentScope(scope);
         }
 
-        /*if ("IoC.Adapter".equals(key)) {
+        if ("IoC.Adapter".equals(key)) {
 
-
-
-
-            return (T) args[0].class.getConstructor(
-                    int.class, int.class, double.class).newInstance(_xval1,_xval2,_pval);
         }
-        var adapter = IoC.Resolve("Adapter", typeof(IMovable), obj);*/
+        //var adapter = IoC.Resolve("Adapter", typeof(IMovable), obj);*/
 
         if ("IoC.Register".equals(key)) {
             return (T) scope.getDependencies(scopeName).put((String)args[0], args);
