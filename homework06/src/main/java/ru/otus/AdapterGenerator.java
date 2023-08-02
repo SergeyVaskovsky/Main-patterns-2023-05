@@ -15,15 +15,20 @@ public class AdapterGenerator {
 
     public List<String> generate() {
         ArrayList<String> list = new ArrayList<>();
-        list.add(String.format("public class %sAdapter implements %s {", clazz.getName(), clazz.getName()));
+        list.add("import ru.otus.Movable;");
+        list.add("import ru.otus.Vector;");
+        list.add("import ru.otus.ioc.IoC;");
         list.add("");
-        list.add("UObject obj;");
-        list.add(String.format("public %sAdapter(UObject obj) {", clazz.getName()));
+        list.add(String.format("public class %sAdapter implements %s {", clazz.getSimpleName(), clazz.getSimpleName()));
+        list.add("");
+        list.add("Object obj;");
+        list.add(String.format("public %sAdapter(Object obj) {", clazz.getSimpleName()));
         list.add("\tthis.obj = obj;");
         list.add( "}");
         list.add("");
         list.addAll(getGetMethods());
         list.addAll(getSetMethods());
+        list.add("}");
         return list;
     }
 
@@ -33,7 +38,7 @@ public class AdapterGenerator {
         for (Method method : methods) {
             if ("get".equalsIgnoreCase(method.getName().substring(0, 3))) {
                 list.add("public " + method.getReturnType().getSimpleName() + " " + method.getName() + "() {");
-                list.add("\treturn IoC.Resolve(\"" + clazz.getSimpleName() + "." + method.getName().substring(3).toLowerCase()
+                list.add("\treturn IoC.resolve(\"" + clazz.getSimpleName() + "." + method.getName().substring(3).toLowerCase()
                         + ".get\", obj);");
                 list.add("}");
             }
@@ -47,8 +52,8 @@ public class AdapterGenerator {
         for (Method method : methods) {
             if ("set".equalsIgnoreCase(method.getName().substring(0, 3))) {
                 list.add("public " + method.getReturnType().getSimpleName() + " " + method.getName() + "(" + getSetParameters(method)+ ") {");
-                list.add("\treturn IoC.Resolve(\"" + clazz.getSimpleName() + "." + method.getName().substring(3).toLowerCase()
-                        + ".set\", obj, newValue);");
+                list.add("\treturn IoC.resolve(\"" + clazz.getSimpleName() + "." + method.getName().substring(3).toLowerCase()
+                        + ".set\", obj, arg0);");
                 list.add("}");
             }
         }

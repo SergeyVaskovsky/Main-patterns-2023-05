@@ -1,6 +1,6 @@
 package ru.otus;
 
-interface Movable {
+public interface Movable {
     Vector getPosition();
 
     Vector setPosition(Vector newValue);
