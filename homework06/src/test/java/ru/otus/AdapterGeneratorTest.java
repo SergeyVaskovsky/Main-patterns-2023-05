@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AdapterGeneratorTests {
+public class AdapterGeneratorTest {
 
     private static AdapterGenerator adapterGenerator;
     private static Class<?> clazz;
