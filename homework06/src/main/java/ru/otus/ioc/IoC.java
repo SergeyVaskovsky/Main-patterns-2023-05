@@ -1,6 +1,11 @@
 package ru.otus.ioc;
 
+import ru.otus.*;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class IoC {
@@ -18,9 +23,13 @@ public class IoC {
         }
 
         if ("IoC.Adapter".equals(key)) {
+            Class<?> clazz = (Class<?>) args[0];
+            var adapterGenerator = new AdapterGenerator(clazz);
+            var adapterCompiler = new AdapterCompiler();
+            List<String> sourceCode = adapterGenerator.generate();
+            return (T) adapterCompiler.compile(clazz.getSimpleName() + "Adapter", sourceCode, (GameObject) args[1], GameObject.class);
 
         }
-        //var adapter = IoC.Resolve("Adapter", typeof(IMovable), obj);*/
 
         if ("IoC.Register".equals(key)) {
             return (T) scope.getDependencies(scopeName).put((String)args[0], args);
@@ -32,6 +41,18 @@ public class IoC {
                 scope.addScope(scopeName);
             }
             return null;
+        }
+
+        if ("Movable.position.get".equals(key)) {
+            return (T) ((GameObject) args[0]).getProperty(Consts.POSITION);
+        }
+
+        if ("Movable.velocity.get".equals(key)) {
+            return (T) ((GameObject) args[0]).getProperty(Consts.VELOCITY);
+        }
+
+        if ("Movable.position.set".equals(key)) {
+            return (T) ((GameObject) args[0]).setProperty(Consts.POSITION, args[1]);
         }
 
         Object[] dependencyArgs = scope.getDependencies(scopeName).get(key);

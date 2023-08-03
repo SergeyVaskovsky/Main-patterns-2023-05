@@ -1,27 +1,17 @@
 package ru.otus;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.otus.ioc.IoC;
 
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.List;
 
-import static org.junit.platform.commons.util.ReflectionUtils.getDeclaredConstructor;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AdapterGeneratorTests {
 
     private static AdapterGenerator adapterGenerator;
     private static Class<?> clazz;
-    private static AdapterCompiler adapterCompiler;
 
     @BeforeAll
     static void newAdapterGenerator() {
@@ -32,47 +22,64 @@ public class AdapterGeneratorTests {
     @Test
     void shouldGenerateAdapterClass() {
         List<String> adapterClass = adapterGenerator.generate();
-        Assertions.assertEquals(adapterClass.get(0), "import ru.otus.Movable;");
-        Assertions.assertEquals(adapterClass.get(1), "import ru.otus.Vector;");
-        Assertions.assertEquals(adapterClass.get(2), "import ru.otus.ioc.IoC;");
-        Assertions.assertEquals(adapterClass.get(4),
+        assertEquals(adapterClass.get(0), "import ru.otus.Movable;");
+        assertEquals(adapterClass.get(1), "import ru.otus.Vector;");
+        assertEquals(adapterClass.get(2), "import ru.otus.GameObject;");
+        assertEquals(adapterClass.get(3), "import ru.otus.ioc.IoC;");
+        assertEquals(adapterClass.get(5),
                 String.format("public class %sAdapter implements %s {", clazz.getSimpleName(), clazz.getSimpleName()));
     }
 
     @Test
     void shouldHaveConstructor() {
         List<String> adapterClass = adapterGenerator.generate();
-        Assertions.assertEquals(adapterClass.get(6), "Object obj;");
-        Assertions.assertEquals(adapterClass.get(7), String.format("public %sAdapter(Object obj) {", clazz.getSimpleName()));
-        Assertions.assertEquals(adapterClass.get(8), "\tthis.obj = obj;");
-        Assertions.assertEquals(adapterClass.get(9), "}");
+        assertEquals(adapterClass.get(7), "GameObject obj;");
+        assertEquals(adapterClass.get(8), String.format("public %sAdapter(GameObject obj) {", clazz.getSimpleName()));
+        assertEquals(adapterClass.get(9), "\tthis.obj = obj;");
+        assertEquals(adapterClass.get(10), "}");
     }
 
     @Test
     void shouldReleaseGetMethods() {
         List<String> adapterClass = adapterGenerator.generate();
 
-        Assertions.assertEquals("public Vector getPosition() {", adapterClass.get(10));
-        Assertions.assertEquals("\treturn IoC.resolve(\"Movable.position.get\", obj);", adapterClass.get(11));
-        Assertions.assertEquals("}", adapterClass.get(12));
-        Assertions.assertEquals("public Vector getVelocity() {", adapterClass.get(13));
-        Assertions.assertEquals("\treturn IoC.resolve(\"Movable.velocity.get\", obj);", adapterClass.get(14));
-        Assertions.assertEquals("}", adapterClass.get(15));
+        assertEquals("public Vector getPosition() {", adapterClass.get(12));
+        assertEquals("\treturn IoC.resolve(\"Movable.position.get\", obj);", adapterClass.get(13));
+        assertEquals("}", adapterClass.get(14));
+        assertEquals("public Vector getVelocity() {", adapterClass.get(15));
+        assertEquals("\treturn IoC.resolve(\"Movable.velocity.get\", obj);", adapterClass.get(16));
+        assertEquals("}", adapterClass.get(17));
     }
 
     @Test
     void shouldReleaseSetMethods() {
         List<String> adapterClass = adapterGenerator.generate();
 
-        Assertions.assertEquals("public Vector setPosition(Vector arg0) {", adapterClass.get(16));
-        Assertions.assertEquals("\treturn IoC.resolve(\"Movable.position.set\", obj, arg0);", adapterClass.get(17));
-        Assertions.assertEquals("}", adapterClass.get(18));
+        assertEquals("public Vector setPosition(Vector arg0) {", adapterClass.get(18));
+        assertEquals("\treturn IoC.resolve(\"Movable.position.set\", obj, arg0);", adapterClass.get(19));
+        assertEquals("}", adapterClass.get(20));
     }
 
     @Test
-    void shouldGenerateClass() throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        List<String> sourceCode = adapterGenerator.generate();
-        Object adapter = adapterCompiler.compile(clazz.getSimpleName(), sourceCode);
+    void shouldGenerateClass() {
+        GameObject gameObject = new GameObjectImpl();
+        var adapter = IoC.resolve("IoC.Adapter", Movable.class, gameObject);
+
+        gameObject.setProperty(Consts.POSITION, new Vector(10,11));
+        gameObject.setProperty(Consts.VELOCITY, new Vector(2,1));
+
+        var currentPosition = ((Movable) adapter).getPosition();
+        var currentVelocity = ((Movable) adapter).getVelocity();
+        var newPosition = new Vector(
+                currentPosition.getX() + currentVelocity.getX(),
+                currentPosition.getY() + currentVelocity.getY());
+        ((Movable) adapter).setPosition(newPosition);
+
+        var newCurrentPosition = ((Movable) adapter).getPosition();
+
+        assertEquals(newCurrentPosition.getX(), newPosition.getX());
+        assertEquals(newCurrentPosition.getY(), newPosition.getY());
+
     }
 
 }

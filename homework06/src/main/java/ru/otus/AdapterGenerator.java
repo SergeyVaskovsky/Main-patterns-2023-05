@@ -3,7 +3,9 @@ package ru.otus;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AdapterGenerator {
 
@@ -17,12 +19,13 @@ public class AdapterGenerator {
         ArrayList<String> list = new ArrayList<>();
         list.add("import ru.otus.Movable;");
         list.add("import ru.otus.Vector;");
+        list.add("import ru.otus.GameObject;");
         list.add("import ru.otus.ioc.IoC;");
         list.add("");
         list.add(String.format("public class %sAdapter implements %s {", clazz.getSimpleName(), clazz.getSimpleName()));
         list.add("");
-        list.add("Object obj;");
-        list.add(String.format("public %sAdapter(Object obj) {", clazz.getSimpleName()));
+        list.add("GameObject obj;");
+        list.add(String.format("public %sAdapter(GameObject obj) {", clazz.getSimpleName()));
         list.add("\tthis.obj = obj;");
         list.add( "}");
         list.add("");
@@ -34,7 +37,7 @@ public class AdapterGenerator {
 
     private List<String> getGetMethods() {
         ArrayList<String> list = new ArrayList<>();
-        Method[] methods = clazz.getDeclaredMethods();
+        var methods = Arrays.stream(clazz.getDeclaredMethods()).sorted((o1, o2) -> o1.getName().compareTo(o2.getName())).toList();
         for (Method method : methods) {
             if ("get".equalsIgnoreCase(method.getName().substring(0, 3))) {
                 list.add("public " + method.getReturnType().getSimpleName() + " " + method.getName() + "() {");
