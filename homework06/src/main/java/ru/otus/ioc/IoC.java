@@ -1,9 +1,10 @@
 package ru.otus.ioc;
 
-import ru.otus.*;
+import ru.otus.AdapterCompiler;
+import ru.otus.AdapterGenerator;
+import ru.otus.Consts;
+import ru.otus.GameObject;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +61,4 @@ public class IoC {
         Object object = dependencyResolver.apply(args);
         return (T) object;
     }
-
-
-
 }
