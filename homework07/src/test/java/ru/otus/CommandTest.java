@@ -9,6 +9,7 @@ import ru.otus.ioc.IoC;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CommandTest {
 
@@ -30,30 +31,27 @@ public class CommandTest {
 
         ((Command) IoC.resolve("IoC.AddNewThread", gameObject)).execute();
         Assertions.assertEquals(count + 1, gameObject.getQueueHandlers().size());
+        AtomicBoolean lock = gameObject.getQueueHandlers().get(0).getLock();
+        synchronized (lock) {
+            while (lock.get()) {
+                lock.wait();
 
-            synchronized (gameObject.getQueueHandlers().get(0).getLock()) {
-                //System.out.println("enter sync test");
-                while (gameObject.getQueueHandlers().get(0).getIsEmpty().get()) {
-                   // System.out.println("enter loop test");
-                    gameObject.getQueueHandlers().get(0).getLock().wait();
-
-                }
-                gameObject.getQueueHandlers().get(0).addCommand(new HelloWorldCommand());
-                //System.out.println("add command test");
-
-                gameObject.getQueueHandlers().get(0).getIsEmpty().set(true);
-                gameObject.getQueueHandlers().get(0).getLock().notifyAll();
-
-                while (gameObject.getQueueHandlers().get(0).getIsEmpty().get()) {
-                    gameObject.getQueueHandlers().get(0).getLock().wait();
-                }
             }
+            gameObject.getQueueHandlers().get(0).addCommand(new HelloWorldCommand());
+
+            lock.set(true);
+            lock.notifyAll();
+
+            while (lock.get()) {
+                lock.wait();
+            }
+        }
 
         System.out.flush();
         String s = baos.toString();
         Assertions.assertLinesMatch(
                 List.of("Hello World\n".split("\n")),
                 List.of(s.split("\n"))
-                );
+        );
     }
 }
