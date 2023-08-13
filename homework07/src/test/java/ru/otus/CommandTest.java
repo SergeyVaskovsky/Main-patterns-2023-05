@@ -31,26 +31,28 @@ public class CommandTest {
 
         ((Command) IoC.resolve("IoC.AddNewThread", gameObject)).execute();
         Assertions.assertEquals(count + 1, gameObject.getQueueHandlers().size());
+
         AtomicBoolean lock = gameObject.getQueueHandlers().get(0).getLock();
-        synchronized (lock) {
-            while (lock.get()) {
-                lock.wait();
+        for (int i = 0; i < 3; i++) {
+            synchronized (lock) {
+                while (lock.get()) {
+                    lock.wait();
+                }
+                gameObject.getQueueHandlers().get(0).addCommand(new HelloWorldCommand());
 
-            }
-            gameObject.getQueueHandlers().get(0).addCommand(new HelloWorldCommand());
+                lock.set(true);
+                lock.notifyAll();
 
-            lock.set(true);
-            lock.notifyAll();
-
-            while (lock.get()) {
-                lock.wait();
+                while (lock.get()) {
+                    lock.wait();
+                }
             }
         }
 
         System.out.flush();
         String s = baos.toString();
         Assertions.assertLinesMatch(
-                List.of("Hello World\n".split("\n")),
+                List.of("Hello World\nHello World\nHello World\n".split("\n")),
                 List.of(s.split("\n"))
         );
     }

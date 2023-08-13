@@ -1,5 +1,7 @@
 package ru.otus;
 
+import ru.otus.ioc.ExceptionHandler;
+
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -31,7 +33,7 @@ public class QueueHandler implements Runnable {
                 try {
                     command.execute();
                 } catch (Exception exception) {
-                    //ExceptionHandler.handle(exception, command).execute();
+                    ExceptionHandler.handle(exception, command).execute();
                 }
                 lock.notifyAll();
 
