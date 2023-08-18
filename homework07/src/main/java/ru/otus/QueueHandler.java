@@ -1,6 +1,8 @@
 package ru.otus;
 
 import ru.otus.ioc.ExceptionHandler;
+import ru.otus.ioc.FunctionWithObjects;
+import ru.otus.ioc.IoC;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -16,7 +18,10 @@ public class QueueHandler implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        IoC.resolve("Scopes.Current.Set", this.toString());
+        IoC.resolve("IoC.Register", "stopRule", (FunctionWithObjects) (args) -> true);
+        Boolean run = (Boolean) IoC.resolve("stopRule");
+        while (run) {
             Command command;
 
             synchronized (lock) {
@@ -38,6 +43,8 @@ public class QueueHandler implements Runnable {
                 lock.notifyAll();
 
             }
+            IoC.resolve("Scopes.Current.Set", this.toString());
+            run = (Boolean) IoC.resolve("stopRule");
 
         }
     }
