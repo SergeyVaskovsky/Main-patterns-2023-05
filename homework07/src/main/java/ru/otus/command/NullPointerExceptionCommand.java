@@ -6,6 +6,5 @@ public class NullPointerExceptionCommand implements Command {
 
     @Override
     public void execute() {
-
     }
 }

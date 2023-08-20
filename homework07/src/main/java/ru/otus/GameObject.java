@@ -9,19 +9,17 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class GameObject {
 
-    private final List<Thread> threads = new ArrayList<>();
-
+    private Thread thread;
     public void addNewThread() {
         IoC.resolve("IoC.Register", "queueHandler", (FunctionWithObjects) (args) -> new QueueHandler(new LinkedBlockingQueue<>()));
         var handler = (QueueHandler) IoC.resolve("queueHandler");
         var handlers = (ArrayList<QueueHandler>) IoC.resolve("queueHandlers");
         handlers.add(handler);
-        Thread thread = new Thread(handler);
-        threads.add(thread);
+        thread = new Thread(handler);
         thread.start();
     }
 
-    public List<Thread> getThreads() {
-        return threads;
+    public Thread getThread() {
+        return thread;
     }
 }
