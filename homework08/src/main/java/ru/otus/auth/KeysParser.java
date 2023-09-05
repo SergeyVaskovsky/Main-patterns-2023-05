@@ -1,4 +1,4 @@
-package ru.otus.controller;
+package ru.otus.auth;
 
 import lombok.SneakyThrows;
 

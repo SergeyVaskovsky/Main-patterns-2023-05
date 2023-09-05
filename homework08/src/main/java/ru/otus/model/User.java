@@ -1,4 +1,4 @@
-package ru.otus.controller;
+package ru.otus.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
