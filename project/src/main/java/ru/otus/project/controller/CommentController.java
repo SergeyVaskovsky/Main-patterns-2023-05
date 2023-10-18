@@ -3,6 +3,7 @@ package ru.otus.project.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.project.model.CreateNewErrorCommentDto;
 import ru.otus.project.model.Tag;
@@ -32,7 +33,7 @@ public class CommentController {
     }
 
     @PostMapping("/error-tag")
-    public void saveTags(CreateNewErrorCommentDto dto) {
+    public void saveTags(@RequestBody CreateNewErrorCommentDto dto) {
         errorService.saveErrorAndTags(dto);
     }
 }

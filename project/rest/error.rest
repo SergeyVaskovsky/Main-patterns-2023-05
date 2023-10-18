@@ -1,0 +1,22 @@
+POST http://localhost:8091/error-tag
+Content-Type: application/json
+
+{
+  "tags": [
+    {
+      "id": 1,
+      "name": "tag1"
+    },
+    {
+      "id": 2,
+      "name": "tag2"
+    },
+    {
+      "name": "tag4"
+    }
+  ],
+  "description": "first error"
+}
+
+###
+GET http://localhost:8091/error-tag
