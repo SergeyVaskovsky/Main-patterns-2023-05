@@ -9,16 +9,18 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "comment")
+@Table(name = "error_comment")
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentEntity {
+public class ErrorCommentEntity {
 
     @Id
     private Long id;
 
-    private String title;
-
     private String description;
 
+    public ErrorCommentEntity(long id, String description) {
+        this.id = id;
+        this.description = description;
+    }
 }

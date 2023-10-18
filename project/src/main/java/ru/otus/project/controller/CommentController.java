@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.otus.project.model.Comment;
+import ru.otus.project.model.CreateNewErrorCommentDto;
 import ru.otus.project.model.Tag;
-import ru.otus.project.service.CommentService;
+import ru.otus.project.model.TypicalErrorComment;
+import ru.otus.project.service.ErrorService;
 import ru.otus.project.service.TagService;
+import ru.otus.project.service.TypicalErrorCommentService;
 
 import java.util.List;
 
@@ -15,12 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final CommentService commentService;
+    private final TypicalErrorCommentService typicalErrorCommentService;
     private final TagService tagService;
+    private final ErrorService errorService;
 
     @GetMapping("/typical-error")
-    public List<Comment> getComments() {
-        return commentService.findAll();
+    public List<TypicalErrorComment> getComments() {
+        return typicalErrorCommentService.findAll();
     }
 
     @GetMapping("/error-tag")
@@ -29,7 +32,7 @@ public class CommentController {
     }
 
     @PostMapping("/error-tag")
-    public void saveTags(List<Tag> tags) {
-        tagService.saveTags(tags);
+    public void saveTags(CreateNewErrorCommentDto dto) {
+        errorService.saveErrorAndTags(dto);
     }
 }

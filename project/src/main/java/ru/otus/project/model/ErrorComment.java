@@ -3,7 +3,7 @@ package ru.otus.project.model;
 import lombok.Value;
 
 @Value(staticConstructor = "create")
-public class Tag {
+public class ErrorComment {
     long id;
-    String name;
+    String description;
 }
