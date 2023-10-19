@@ -1,4 +1,4 @@
-package ru.otus.project.model;
+package ru.otus.project.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,17 +7,19 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "comment")
+@Table(name = "tag")
 @NoArgsConstructor
 @AllArgsConstructor
-public class TypicalErrorCommentEntity {
+public class TagEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String name;
 
-    private String description;
-
+    public TagEntity(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -1,9 +1,10 @@
-package ru.otus.project.service;
+package ru.otus.project.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.project.model.TypicalErrorComment;
 import ru.otus.project.repository.TypicalErrorCommentEntityRepository;
+import ru.otus.project.service.TypicalErrorCommentService;
 
 import java.util.List;
 import java.util.stream.Collectors;

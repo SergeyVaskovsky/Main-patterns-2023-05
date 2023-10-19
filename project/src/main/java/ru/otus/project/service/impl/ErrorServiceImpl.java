@@ -1,15 +1,16 @@
-package ru.otus.project.service;
+package ru.otus.project.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.project.model.CreateNewErrorCommentDto;
-import ru.otus.project.model.ErrorCommentEntity;
-import ru.otus.project.model.ErrorCommentTagEntity;
-import ru.otus.project.model.TagEntity;
+import ru.otus.project.model.entity.ErrorCommentEntity;
+import ru.otus.project.model.entity.ErrorCommentTagEntity;
+import ru.otus.project.model.entity.TagEntity;
 import ru.otus.project.repository.ErrorCommentEntityRepository;
 import ru.otus.project.repository.ErrorCommentTagEntityRepository;
 import ru.otus.project.repository.TagEntityRepository;
+import ru.otus.project.service.ErrorService;
 
 import java.util.stream.Collectors;
 

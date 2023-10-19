@@ -1,4 +1,4 @@
-package ru.otus.project.model;
+package ru.otus.project.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
