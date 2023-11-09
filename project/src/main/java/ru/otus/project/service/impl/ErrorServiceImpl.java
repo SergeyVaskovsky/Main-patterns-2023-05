@@ -30,7 +30,7 @@ public class ErrorServiceImpl implements ErrorService {
                 dto
                         .getTags()
                         .stream()
-                        .map(it -> new TagEntity(it.getId(), it.getName()))
+                        .map(it -> new TagEntity(it.getId(), it.getName(), 1L))
                         .collect(Collectors.toList()));
         errorCommentTagEntityRepository.saveAll(
                 tagEntityList.stream().map(it -> new ErrorCommentTagEntity(

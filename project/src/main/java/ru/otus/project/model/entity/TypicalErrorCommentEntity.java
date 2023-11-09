@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "comment")
+@Table(name = "typical_error_comment")
 @NoArgsConstructor
 @AllArgsConstructor
 public class TypicalErrorCommentEntity {

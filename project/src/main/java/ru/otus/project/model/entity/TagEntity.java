@@ -18,6 +18,8 @@ public class TagEntity {
 
     private String name;
 
+    private Long projectId;
+
     public TagEntity(long id, String name) {
         this.id = id;
         this.name = name;
